@@ -1,0 +1,35 @@
+---
+layout: default
+title: BrainstormOps - Blog de Tecnologia e Inovação
+---
+
+<section class="hero-section">
+  <div id="hero-canvas"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">BrainstormOps</h1>
+  </div>
+  <div class="scroll-indicator"></div>
+</section>
+
+<section class="posts-section">
+  <div class="posts-container">
+    <h2 class="section-title">Posts Recentes</h2>
+    
+    <div class="posts-grid">
+      {% for post in site.posts limit:6 %}
+      <article class="post-card">
+        <h3>{{ post.title }}</h3>
+        <div class="post-meta">
+          <time datetime="{{ post.date | date_to_xmlschema }}">
+            {{ post.date | date: "%d/%m/%Y" }}
+          </time>
+        </div>
+        <p class="post-excerpt">
+          {{ post.excerpt | strip_html | truncatewords: 30 }}
+        </p>
+        <a href="{{ post.url | relative_url }}" class="read-more">Ler mais →</a>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>

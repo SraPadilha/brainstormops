@@ -1,0 +1,38 @@
+# Site settings
+title: BrainstormOps
+description: Blog de tecnologia e inovação
+baseurl: "" # Se seu repo for username.github.io, deixe vazio. Se for username.github.io/repo-name, coloque "/repo-name"
+url: "" # Será preenchido automaticamente pelo GitHub Pages
+
+# Build settings
+markdown: kramdown
+permalink: /:year/:month/:day/:title/
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /:collection/:year/:month/:day/:title/
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+
+# GitHub Pages specific
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Optional: Uncomment if using a custom domain
+# url: "https://yourdomain.com"
