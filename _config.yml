@@ -1,7 +1,7 @@
 # Site settings
 title: BrainstormOps
 description: Blog de tecnologia e inovação
-baseurl: "" # Se seu repo for username.github.io, deixe vazio. Se for username.github.io/repo-name, coloque "/repo-name"
+baseurl: "/brainstormops" # Se seu repo for username.github.io, deixe vazio. Se for username.github.io/repo-name, coloque "/repo-name"
 url: "" # Será preenchido automaticamente pelo GitHub Pages
 
 # Build settings
