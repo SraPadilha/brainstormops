@@ -4,10 +4,12 @@ title: BrainstormOps - Blog de Tecnologia e Inovação
 ---
 
 <section class="hero-section">
-  <div id="hero-canvas"></div>
+  <canvas id="hero-canvas"></canvas>
+
   <div class="hero-content">
     <h1 class="hero-title">BrainstormOps</h1>
   </div>
+
   <div class="scroll-indicator"></div>
 </section>
 
@@ -33,3 +35,45 @@ title: BrainstormOps - Blog de Tecnologia e Inovação
     </div>
   </div>
 </section>
+
+<style>
+  /* ===== HERO CANVAS ===== */
+  #hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    z-index: -1; /* fica atrás do texto */
+  }
+
+  .hero-title {
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+  }
+
+  .hero-title.visible {
+    opacity: 1;
+  }
+</style>
+
+{% if page.url == "/" %}
+<!-- THREE.js + Explosão -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="{{ '/assets/js/explosion.js' | relative_url }}"></script>
+
+<script>
+  /* Quando a animação terminar, mostra o texto */
+  document.addEventListener("heroAnimationEnd", () => {
+    document.querySelector(".hero-title").classList.add("visible");
+  });
+
+  /* Fallback — se algo der errado, revela o texto em 5s */
+  setTimeout(() => {
+    if (!window.__heroDone) {
+      document.dispatchEvent(new Event("heroAnimationEnd"));
+    }
+  }, 5000);
+</script>
+{% endif %}
