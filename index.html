@@ -36,28 +36,6 @@ title: BrainstormOps - Blog de Tecnologia e Inovação
   </div>
 </section>
 
-<style>
-  /* ===== HERO CANVAS ===== */
-  #hero-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: block;
-    z-index: -1; /* fica atrás do texto */
-  }
-
-  .hero-title {
-    opacity: 0;
-    transition: opacity 1.5s ease-in-out;
-  }
-
-  .hero-title.visible {
-    opacity: 1;
-  }
-</style>
-
 {% if page.url == "/" %}
 <!-- THREE.js + Explosão -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
