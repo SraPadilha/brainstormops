@@ -1,4 +1,4 @@
-/* === BrainstormOps Big Bang (Three.js, fiel ao CodePen original) === */
+/* === BrainstormOps Big Bang (Three.js) - VERSÃO CORRIGIDA === */
 /* Adaptado para GitHub Pages + canvas existente + evento "heroAnimationEnd" */
 
 let scene, camera, renderer, controls, composer;
@@ -60,9 +60,9 @@ function init() {
 
   let bloomPass = new THREE.UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
-    2,
-    0.4,
-    0
+    2,    // strength
+    0.5,  // radius
+    0     // threshold
   );
   composer.addPass(bloomPass);
 
@@ -98,8 +98,11 @@ function createParticleSystem() {
     new THREE.BufferAttribute(particlePositions, 3)
   );
 
+  // Restaurando a textura sprite para melhor visualização
+  const sprite = generateSprite();
   const material = new THREE.PointsMaterial({
     size: 2,
+    map: sprite,
     color: 0xffffff,
     blending: THREE.AdditiveBlending,
     depthTest: false,
@@ -111,10 +114,37 @@ function createParticleSystem() {
   scene.add(particleSystem);
 }
 
-/* ===================== GUI (DISABLED, BUT REQUIRED) ========================= */
+/* ===================== SPRITE TEXTURE ========================= */
+
+function generateSprite() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 64;
+  canvas.height = 64;
+  const context = canvas.getContext("2d");
+
+  // Cria um gradiente radial para o brilho
+  const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
+  gradient.addColorStop(0.2, "rgba(255, 200, 200, 0.8)");
+  gradient.addColorStop(0.4, "rgba(200, 100, 100, 0.6)");
+  gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, 64, 64);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  return texture;
+}
+
+/* ===================== GUI ========================= */
 
 function setupGUI() {
-  params = { expansionSpeed: 50 };
+  params = { 
+    expansionSpeed: 50,
+    particleSize: 2,
+    bloomStrength: 2,
+    bloomRadius: 0.5,
+    bloomThreshold: 0
+  };
 }
 
 /* ===================== RESIZE ========================= */
@@ -133,10 +163,20 @@ function animate() {
   const delta = clock.getDelta();
 
   updateParticles(delta);
+  
+  // Adiciona galáxias após 10 segundos
+  let elapsed = clock.elapsedTime;
+  if (elapsed > 10 && !galaxySystem) {
+    createGalaxyCluster();
+  }
+  if (elapsed > 15 && !nebula) {
+    createNebula();
+  }
+
   controls.update();
   composer.render(delta);
 
-  if (clock.elapsedTime > 3.5) revealTitle(); // texto sincronizado
+  if (clock.elapsedTime > 3.5 && titleText) revealTitle(); // texto sincronizado
   if (clock.elapsedTime > 6 && !window.__heroDone) finishAnimation();
 }
 
@@ -153,9 +193,89 @@ function updateParticles(delta) {
   particleSystem.geometry.attributes.position.needsUpdate = true;
 }
 
+/* ===================== GALAXY CLUSTER ========================= */
+
+function createGalaxyCluster() {
+  const galaxyCount = 5000;
+  const geometry = new THREE.BufferGeometry();
+  const positions = new Float32Array(galaxyCount * 3);
+
+  for (let i = 0; i < galaxyCount; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 1000;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 1000;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 1000;
+  }
+  
+  geometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(positions, 3)
+  );
+
+  const material = new THREE.PointsMaterial({
+    size: 1.5,
+    color: 0xaaaaaa,
+    blending: THREE.AdditiveBlending,
+    transparent: true,
+    opacity: 0.5,
+    depthTest: false,
+  });
+
+  galaxySystem = new THREE.Points(geometry, material);
+  scene.add(galaxySystem);
+}
+
+/* ===================== NEBULA ========================= */
+
+function createNebula() {
+  const nebulaGeometry = new THREE.SphereGeometry(500, 32, 32);
+  const nebulaMaterial = new THREE.MeshBasicMaterial({
+    map: generateNebulaTexture(),
+    side: THREE.BackSide,
+    transparent: true,
+    opacity: 0.7,
+  });
+  nebula = new THREE.Mesh(nebulaGeometry, nebulaMaterial);
+  scene.add(nebula);
+}
+
+/* ===================== NEBULA TEXTURE ========================= */
+
+function generateNebulaTexture() {
+  const size = 512;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const context = canvas.getContext("2d");
+
+  // Gradiente radial como base da nebulosa
+  const gradient = context.createRadialGradient(
+    size / 2,
+    size / 2,
+    size / 8,
+    size / 2,
+    size / 2,
+    size / 2
+  );
+  gradient.addColorStop(0, "rgba(50, 0, 100, 0.8)");
+  gradient.addColorStop(1, "rgba(0, 0, 0, 0.0)");
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, size, size);
+
+  // Adiciona pontos aleatórios simulando estrelas e gás
+  for (let i = 0; i < 1000; i++) {
+    context.fillStyle = "rgba(255,255,255," + Math.random() * 0.1 + ")";
+    const x = Math.random() * size;
+    const y = Math.random() * size;
+    context.fillRect(x, y, 1, 1);
+  }
+  
+  return new THREE.CanvasTexture(canvas);
+}
+
 /* ===================== TITLE REVEAL ========================= */
 
 function revealTitle() {
+  if (!titleText) return;
   titleText.style.transition = "transform 1.3s ease-out, opacity 1.3s";
   titleText.style.opacity = "1";
   titleText.style.transform = "translate(-50%, -50%) scale(1)";
