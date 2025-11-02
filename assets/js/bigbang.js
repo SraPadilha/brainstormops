@@ -216,8 +216,8 @@ function animateTitle() {
     // Easing ease-out cubic para suavidade
     const easeProgress = 1 - Math.pow(1 - progress, 3);
     
-    // Escala de 0.1 (visível mas pequeno) até 1 (tamanho final)
-    const scale = 0.1 + (easeProgress * 0.9);
+    // Escala de 0.001 (MIUDINHO como partículas) até 1 (tamanho final)
+    const scale = 0.001 + (easeProgress * 0.999);
     
     // Opacity de 0 até 1 - SEMPRE GARANTE QUE FIQUE 100% OPACO NO FINAL
     const opacity = Math.min(1, easeProgress * 1.2); // Multiplica por 1.2 pra garantir que chega em 1
