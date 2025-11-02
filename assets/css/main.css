@@ -171,6 +171,16 @@ body {
   background: #000;
 }
 
+/* ===== HERO INTRO SECTION ===== */
+
+#hero-intro {
+  position: relative;
+  width: 100vw;
+  height: 120vh; /* tela + respiro visual */
+  overflow: hidden;
+  background: #000;
+}
+
 /* Canvas da explosão */
 #hero-canvas {
   position: absolute;
@@ -197,6 +207,26 @@ body {
   z-index: 5;
   pointer-events: none;
 }
+
+/* Indicador de scroll */
+#scroll-indicator {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8rem;
+  color: white;
+  opacity: 0.7;
+  animation: bounce 1.4s infinite;
+  z-index: 6;
+  pointer-events: none;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 10px); }
+}
+
 
 /* Indicador de scroll */
 #scroll-indicator {
