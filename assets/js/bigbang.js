@@ -1,13 +1,11 @@
 /* ================================
    BrainstormOps Big Bang Animation
-   Baseado no CodePen original
-   Com texto BrainstormOps crescente
+   Explosão BRANCA + Sem nebulosa roxa
    ================================ */
 
 let scene, camera, renderer, controls, composer;
 let particleSystem, particlePositions, particleVelocities;
 let galaxySystem = null;
-let nebula = null;
 let particleCount = 20000;
 let params;
 let clock = new THREE.Clock();
@@ -113,7 +111,7 @@ function createParticleSystem() {
     new THREE.BufferAttribute(particlePositions, 3)
   );
 
-  // Material com sprite texture
+  // Material com sprite texture BRANCA
   const sprite = generateSprite();
   const material = new THREE.PointsMaterial({
     size: 2,
@@ -122,25 +120,27 @@ function createParticleSystem() {
     depthTest: false,
     transparent: true,
     opacity: 0.8,
-    color: 0xffffff,
+    color: 0xffffff, // Branco puro
   });
 
   particleSystem = new THREE.Points(geometry, material);
   scene.add(particleSystem);
 }
 
-/* ===================== SPRITE TEXTURE ========================= */
+/* ===================== SPRITE TEXTURE (BRANCA) ========================= */
 function generateSprite() {
   const canvas = document.createElement("canvas");
   canvas.width = 64;
   canvas.height = 64;
   const context = canvas.getContext("2d");
 
+  // Gradiente radial BRANCO PURO (sem tons de vermelho/rosa)
   const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
-  gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-  gradient.addColorStop(0.2, "rgba(255, 200, 200, 0.8)");
-  gradient.addColorStop(0.4, "rgba(200, 100, 100, 0.6)");
-  gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+  gradient.addColorStop(0, "rgba(255, 255, 255, 1)");      // Centro branco brilhante
+  gradient.addColorStop(0.2, "rgba(255, 255, 255, 0.9)");  // Branco forte
+  gradient.addColorStop(0.4, "rgba(220, 220, 255, 0.6)");  // Branco levemente azulado
+  gradient.addColorStop(0.7, "rgba(180, 180, 220, 0.3)");  // Branco suave
+  gradient.addColorStop(1, "rgba(0, 0, 0, 0)");            // Transparente nas bordas
   context.fillStyle = gradient;
   context.fillRect(0, 0, 64, 64);
 
@@ -180,6 +180,7 @@ function animate() {
     createGalaxyCluster();
   }
 
+  // NEBULOSA ROXA REMOVIDA! ✅
 
   // Anima o título crescendo junto com a explosão
   if (!titleAnimationStarted && titleText) {
@@ -241,7 +242,7 @@ function animateTitle() {
   updateTitle();
 }
 
-/* ===================== GALAXY CLUSTER ========================= */
+/* ===================== GALAXY CLUSTER (partículas brancas do fundo) ========================= */
 function createGalaxyCluster() {
   const galaxyCount = 5000;
   const geometry = new THREE.BufferGeometry();
@@ -257,7 +258,7 @@ function createGalaxyCluster() {
 
   const material = new THREE.PointsMaterial({
     size: 1.5,
-    color: 0xaaaaaa,
+    color: 0xffffff, // Branco também
     blending: THREE.AdditiveBlending,
     transparent: true,
     opacity: 0.5,
@@ -266,45 +267,4 @@ function createGalaxyCluster() {
 
   galaxySystem = new THREE.Points(geometry, material);
   scene.add(galaxySystem);
-}
-
-/* ===================== NEBULA ========================= */
-function createNebula() {
-  const nebulaGeometry = new THREE.SphereGeometry(500, 32, 32);
-  const nebulaMaterial = new THREE.MeshBasicMaterial({
-    map: generateNebulaTexture(),
-    side: THREE.BackSide,
-    transparent: true,
-    opacity: 0.7,
-  });
-  nebula = new THREE.Mesh(nebulaGeometry, nebulaMaterial);
-  scene.add(nebula);
-}
-
-/* ===================== NEBULA TEXTURE ========================= */
-function generateNebulaTexture() {
-  const size = 512;
-  const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
-  const context = canvas.getContext("2d");
-
-  const gradient = context.createRadialGradient(
-    size / 2, size / 2, size / 8,
-    size / 2, size / 2, size / 2
-  );
-  gradient.addColorStop(0, "rgba(50, 0, 100, 0.8)");
-  gradient.addColorStop(1, "rgba(0, 0, 0, 0.0)");
-  context.fillStyle = gradient;
-  context.fillRect(0, 0, size, size);
-
-  // Estrelinhas
-  for (let i = 0; i < 1000; i++) {
-    context.fillStyle = "rgba(255,255,255," + Math.random() * 0.1 + ")";
-    const x = Math.random() * size;
-    const y = Math.random() * size;
-    context.fillRect(x, y, 1, 1);
-  }
-
-  return new THREE.CanvasTexture(canvas);
 }
