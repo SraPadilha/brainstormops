@@ -161,21 +161,31 @@ body {
   display: block;
 }
 
-/* Canvas ocupa a tela toda */
-#hero-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
+/* ===== HERO INTRO SECTION ===== */
+
+#hero-intro {
+  position: relative;
   width: 100vw;
-  height: 100vh;
-  display: block;
-  z-index: -1;
-  pointer-events: none;
+  height: 120vh; /* tela + respiro visual */
+  overflow: hidden;
+  background: #000;
 }
 
-/* Título centralizado e animável por transform */
-.hero-title {
-  position: fixed;
+/* Canvas da explosão */
+#hero-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Título animado */
+#hero-title {
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.05);
@@ -184,10 +194,29 @@ body {
   font-weight: 700;
   color: white;
   opacity: 1;
-  z-index: 10;
+  z-index: 5;
   pointer-events: none;
-  transition: transform 0.3s ease-out;
 }
+
+/* Indicador de scroll */
+#scroll-indicator {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8rem;
+  color: white;
+  opacity: 0.7;
+  animation: bounce 1.4s infinite;
+  z-index: 6;
+  pointer-events: none;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 10px); }
+}
+
 
 .scroll-indicator {
   position: absolute;
