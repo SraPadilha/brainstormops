@@ -62,14 +62,5 @@
     title.style.transform = `translate(-50%, -50%) scale(${textScale})`;
 
     if (progress < 1) {
-      requestAnimationFrame(animate);
-    } else {
-      canvas.remove();
-    }
-  }
-
-  createParticles();
-  requestAnimationFrame(animate);
-})();
-
+      requestAnimationFrame(animate
 
