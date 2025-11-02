@@ -1,10 +1,10 @@
 :root {
-  --bg-dark: #121212; /* Fundo mais escuro/preto */
-  --bg-card: #1e1e1e; /* Card mais escuro */
-  --bg-card-hover: #2d2d2d; /* Hover de card */
-  --color-primary: #007bff; /* Azul de detalhe (ajustado para um azul mais neutro) */
-  --color-secondary: #007bff; /* Usar o mesmo azul para detalhes secundários */
-  --color-accent: #007bff; /* Usar o mesmo azul para acentos */
+  --bg-dark: #121212;
+  --bg-card: #1e1e1e;
+  --bg-card-hover: #2d2d2d;
+  --color-primary: #007bff;
+  --color-secondary: #007bff;
+  --color-accent: #007bff;
   --text-primary: #ffffff;
   --text-secondary: #a0aec0;
   --sidebar-width: 280px;
@@ -24,7 +24,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Sidebar */
+/* ===== SIDEBAR ===== */
 .sidebar {
   position: fixed;
   left: 0;
@@ -117,7 +117,7 @@ body {
   display: none;
 }
 
-/* Main content */
+/* ===== MAIN CONTENT ===== */
 .main-content {
   margin-left: var(--sidebar-width);
   transition: margin-left 0.3s ease;
@@ -127,50 +127,16 @@ body {
   margin-left: var(--sidebar-collapsed);
 }
 
-/* Hero section - tela cheia */
-.hero-section {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  background: #121212; /* Fundo preto/cinza escuro simples */
-}
-
-.hero-content {
-  text-align: center;
-  z-index: 1; /* Garantir que o texto fique acima do canvas */
-}
-
-#hero-canvas canvas {
-  display: block;
-}  position: relative;
-}
-
-#hero-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-
-#hero-canvas canvas {
-  display: block;
-}
-/* ===== HERO INTRO SECTION ===== */
-
+/* ===== HERO INTRO SECTION (BIG BANG) ===== */
 #hero-intro {
   position: relative;
   width: 100vw;
-  height: 120vh; /* tela + respiro visual */
+  height: 100vh;
   overflow: hidden;
   background: #000;
 }
 
-/* Canvas da explosão */
+/* Canvas da explosão Three.js */
 #hero-canvas {
   position: absolute;
   top: 0;
@@ -182,7 +148,7 @@ body {
   z-index: 1;
 }
 
-/* Título animado */
+/* Título "BrainstormOps" que cresce */
 #hero-title {
   position: absolute;
   top: 50%;
@@ -192,58 +158,42 @@ body {
   font-size: 4rem;
   font-weight: 700;
   color: white;
-  opacity: 1;
+  opacity: 0;
   z-index: 5;
   pointer-events: none;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  transition: none; /* Removido para controle via JS */
 }
 
 /* Indicador de scroll */
 #scroll-indicator {
   position: absolute;
-  bottom: 25px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.8rem;
-  color: white;
-  opacity: 0.7;
-  animation: bounce 1.4s infinite;
-  z-index: 6;
-  pointer-events: none;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translate(-50%, 0); }
-  50% { transform: translate(-50%, 10px); }
-}
-
-.scroll-indicator {
-  position: absolute;
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  animation: bounce 2s infinite;
-  z-index: 10;
+  font-size: 2rem;
+  color: white;
+  opacity: 0;
+  z-index: 6;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
 }
 
-.scroll-indicator::after {
-  content: '↓';
-  font-size: 32px;
-  color: var(--color-primary);
+#scroll-indicator.visible {
+  opacity: 0.7;
+  animation: bounce 1.5s infinite;
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateX(-50%) translateY(0);
+  0%, 100% { 
+    transform: translateX(-50%) translateY(0); 
   }
-  40% {
-    transform: translateX(-50%) translateY(-10px);
-  }
-  60% {
-    transform: translateX(-50%) translateY(-5px);
+  50% { 
+    transform: translateX(-50%) translateY(-10px); 
   }
 }
 
-/* Posts section */
+/* ===== POSTS SECTION ===== */
 .posts-section {
   min-height: 100vh;
   padding: 80px 40px;
@@ -312,7 +262,7 @@ body {
   color: var(--color-secondary);
 }
 
-/* Responsive */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .sidebar {
     width: var(--sidebar-collapsed);
@@ -330,8 +280,8 @@ body {
     margin-left: 0;
   }
   
-  .hero-title {
-    font-size: 48px;
+  #hero-title {
+    font-size: 2.5rem;
   }
   
   .posts-grid {
