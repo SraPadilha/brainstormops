@@ -1,7 +1,7 @@
 /* ================================
    BrainstormOps Canvas Explosion
-   Fiel ao CodePen original (2D)
-   Texto cresce com ease-out suave
+   Fiel ao CodePen original (Canvas 2D)
+   Com easing + texto sincronizado
    ================================ */
 
 (function () {
@@ -17,14 +17,13 @@
   let particles = [];
   let startTime = null;
   let width, height;
-  const DURATION = 2000; // 2s explosão
-  const TEXT_DURATION = 2000; // 2s para escalar o texto
-  const PARTICLE_COUNT = 180;
-  const PARTICLE_SPEED = 6;
+  const DURATION = 3000; // 3s explosão total
+  const TEXT_DURATION = 3000;
+  const PARTICLE_COUNT = 300;
+  const INITIAL_SPEED = 4.5;
   const TEXT_START_SCALE = 0.05;
   const TEXT_FINAL_SCALE = 1.0;
 
-  // Ease-out cubic
   const easeOut = t => 1 - Math.pow(1 - t, 3);
 
   function resize() {
@@ -34,12 +33,11 @@
   resize();
   window.addEventListener("resize", resize);
 
-  // Criar partículas na origem (centro)
   function createParticles() {
     particles = [];
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = PARTICLE_SPEED * (0.6 + Math.random() * 0.4);
+      const speed = INITIAL_SPEED * (0.5 + Math.random() * 0.8);
       particles.push({
         x: 0,
         y: 0,
@@ -50,30 +48,6 @@
     }
   }
 
-  function updateParticles(progress) {
-    particles.forEach(p => {
-      p.x += p.vx;
-      p.y += p.vy;
-      p.life -= 0.02; // fade natural
-    });
-  }
-
-  function drawParticles() {
-    ctx.fillStyle = "white";
-    particles.forEach(p => {
-      if (p.life > 0) {
-        ctx.globalAlpha = p.life;
-        ctx.fillRect(
-          width / 2 + p.x,
-          height / 2 + p.y,
-          3,
-          3
-        );
-      }
-    });
-    ctx.globalAlpha = 1;
-  }
-
   function animate(timestamp) {
     if (!startTime) startTime = timestamp;
     const elapsed = timestamp - startTime;
@@ -81,32 +55,33 @@
 
     ctx.clearRect(0, 0, width, height);
 
-    updateParticles(progress);
-    drawParticles();
+    const eased = easeOut(progress);
 
-    // === Texto sincronizado com explosão ===
+    particles.forEach(p => {
+      p.x += p.vx * eased * 2.2;   // força realista
+      p.y += p.vy * eased * 2.2;
+      p.life -= 0.01;
+      if (p.life > 0) {
+        ctx.globalAlpha = p.life;
+        ctx.fillStyle = "white";
+        ctx.fillRect(width / 2 + p.x, height / 2 + p.y, 3, 3);
+      }
+    });
+
+    // === Texto cresce sincronizado ===
     const textProgress = Math.min(elapsed / TEXT_DURATION, 1);
-    const scale = TEXT_START_SCALE + (TEXT_FINAL_SCALE - TEXT_START_SCALE) * easeOut(textProgress);
-    title.style.transform = `scale(${scale})`;
-    title.style.opacity = 1;
+    const textScale = TEXT_START_SCALE + (TEXT_FINAL_SCALE - TEXT_START_SCALE) * easeOut(textProgress);
+    title.style.transform = `translate(-50%, -50%) scale(${textScale})`;
 
     if (progress < 1) {
       requestAnimationFrame(animate);
     } else {
-      // Explosão terminou
-      title.style.transform = `scale(${TEXT_FINAL_SCALE})`;
-      title.style.opacity = 1;
-
-      // Opcional: remover canvas (liberar GPU)
-      // canvas.remove();
-
-      // Notifica o restante do site que terminou
       document.dispatchEvent(new Event("heroAnimationEnd"));
       window.__heroDone = true;
     }
   }
 
-  // Início da sequência
   createParticles();
   requestAnimationFrame(animate);
 })();
+
