@@ -176,9 +176,9 @@ body {
 #hero-intro {
   position: relative;
   width: 100vw;
-  height: 120vh; /* tela + respiro visual */
-  overflow: hidden;
+  height: 120vh;
   background: #000;
+  overflow: hidden;
 }
 
 /* Canvas da explosão */
@@ -193,20 +193,40 @@ body {
   z-index: 1;
 }
 
-/* Título animado */
+/* Texto que cresce sincronizado com a explosão */
 #hero-title {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.05);
   transform-origin: center center;
   font-size: 4rem;
   font-weight: 700;
   color: white;
-  opacity: 1;
   z-index: 5;
   pointer-events: none;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(0.05);
 }
+
+/* Indicador de scroll opcional */
+#scroll-indicator {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8rem;
+  color: white;
+  opacity: 0.7;
+  animation: bounce 1.4s infinite;
+  z-index: 6;
+  pointer-events: none;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 10px); }
+}
+
 
 /* Indicador de scroll */
 #scroll-indicator {
