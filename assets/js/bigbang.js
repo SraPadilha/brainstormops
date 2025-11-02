@@ -213,9 +213,6 @@ function updateParticles(delta) {
 function animateTitle() {
   if (!titleText) return;
 
-  // Torna o título visível quando começar a animação
-  titleText.style.visibility = 'visible';
-
   const startTime = clock.elapsedTime;
   
   function updateTitle() {
