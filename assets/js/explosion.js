@@ -1,4 +1,4 @@
-/* BrainstormOps Explosion - Canvas 2D (Fiel ao CodePen original) */
+/* BrainstormOps Explosion - Canvas 2D (Fiel ao CodePen) */
 
 (function () {
   const canvas = document.getElementById("hero-canvas");
@@ -9,12 +9,11 @@
   let particles = [];
   let startTime = null;
   let width, height;
-
-  const DURATION = 3000;            // animação total (3s)
-  const PARTICLE_COUNT = 400;       // mais partículas, igual ao codepen
-  const INITIAL_SPEED = 6;          // velocidade inicial
-  const TEXT_START_SCALE = 0.05;    // começa bem pequeno
-  const TEXT_FINAL_SCALE = 1.0;     // cresce até tamanho visível
+  const DURATION = 3000;
+  const PARTICLE_COUNT = 250;
+  const INITIAL_SPEED = 4;
+  const TEXT_START_SCALE = 0.05;
+  const TEXT_FINAL_SCALE = 1.0;
 
   const easeOut = t => 1 - Math.pow(1 - t, 3);
 
@@ -51,7 +50,7 @@
     particles.forEach(p => {
       p.x += p.vx * eased * 2;
       p.y += p.vy * eased * 2;
-      p.life -= 0.015;
+      p.life -= 0.01;
       if (p.life > 0) {
         ctx.globalAlpha = p.life;
         ctx.fillStyle = "white";
@@ -65,12 +64,12 @@
     if (progress < 1) {
       requestAnimationFrame(animate);
     } else {
-      canvas.style.opacity = "0";
-      setTimeout(() => canvas.remove(), 600);
+      canvas.remove();
     }
   }
 
   createParticles();
   requestAnimationFrame(animate);
 })();
+
 
