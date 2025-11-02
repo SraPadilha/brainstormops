@@ -161,17 +161,33 @@ body {
   display: block;
 }
 
-.hero-title {
-  font-size: 72px;
-  font-weight: 700;
-  color: var(--text-primary);
-  opacity: 0;
-  /* A opacidade e o timing são controlados pelo script explosion.js */
-  text-shadow: 0 0 20px rgba(0, 123, 255, 0.5); /* Sombra azul */
-  letter-spacing: 2px;
+/* Canvas ocupa a tela toda */
+#hero-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: -1;
+  pointer-events: none;
 }
 
-
+/* Título centralizado e animável por transform */
+.hero-title {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.05);
+  transform-origin: center center;
+  font-size: 4rem;
+  font-weight: 700;
+  color: white;
+  opacity: 1;
+  z-index: 10;
+  pointer-events: none;
+  transition: transform 0.3s ease-out;
+}
 
 .scroll-indicator {
   position: absolute;
