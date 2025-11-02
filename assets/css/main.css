@@ -148,25 +148,20 @@ body {
   z-index: 1;
 }
 
-
-/* Título "BrainstormOps" - SEMPRE VISÍVEL */
+/* Título "BrainstormOps" que cresce */
 #hero-title {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.1);
+  transform: translate(-50%, -50%) scale(0.01); /* SUPER pequenininho */
   transform-origin: center center;
   font-size: 4rem;
   font-weight: 700;
-  color: #ffffff; /* Branco puro */
-  opacity: 0;
-  z-index: 10; /* Z-index maior que o canvas */
+  color: white;
+  opacity: 0; /* INVISÍVEL no início */
+  z-index: 5;
   pointer-events: none;
-  text-shadow: 
-    0 0 20px rgba(255, 255, 255, 0.8),
-    0 0 40px rgba(255, 255, 255, 0.5),
-    2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra extra para contraste */
-  letter-spacing: 0.05em;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 /* Indicador de scroll */
