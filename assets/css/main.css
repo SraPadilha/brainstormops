@@ -153,7 +153,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.001); /* MIUDINHO como as partículas */
+  transform: translate(-50%, -50%) scale(0.00001); /* MIUDINHO como as partículas */
   transform-origin: center center;
   font-size: 4rem;
   font-weight: 700;
