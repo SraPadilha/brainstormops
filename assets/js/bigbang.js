@@ -213,6 +213,9 @@ function updateParticles(delta) {
 function animateTitle() {
   if (!titleText) return;
 
+  // Torna o título visível quando começar a animação
+  titleText.style.visibility = 'visible';
+
   const startTime = clock.elapsedTime;
   
   function updateTitle() {
@@ -222,10 +225,10 @@ function animateTitle() {
     // Easing ease-out cubic
     const easeProgress = 1 - Math.pow(1 - progress, 3);
     
-    // Escala de 0.05 (pequenininho) até 1 (normal)
-    const scale = 0.05 + (easeProgress * 0.95);
+    // Escala de 0.01 (SUPER pequenininho) até 1 (normal)
+    const scale = 0.01 + (easeProgress * 0.99);
     
-    // Opacity de 0 até 1
+    // Opacity de 0 até 1 (começa aparecendo devagar)
     const opacity = easeProgress;
     
     titleText.style.opacity = opacity;
