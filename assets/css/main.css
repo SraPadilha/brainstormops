@@ -162,8 +162,6 @@ body {
   z-index: 5;
   pointer-events: none;
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-  transition: none; /* Removido para controle via JS */
-  visibility: hidden; /* Garante que não apareça antes */
 }
 
 /* Indicador de scroll */
