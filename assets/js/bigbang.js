@@ -180,10 +180,6 @@ function animate() {
     createGalaxyCluster();
   }
 
-  // Adiciona nebulosa após 15 segundos
-  if (elapsed > 15 && !nebula) {
-    createNebula();
-  }
 
   // Anima o título crescendo junto com a explosão
   if (!titleAnimationStarted && titleText) {
