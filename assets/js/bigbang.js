@@ -1,13 +1,13 @@
 /* =========================================
-   BrainstormOps Big Bang Animation v4
-   Cinematic Expansion + Brain Core + Galaxy
+   BrainstormOps Big Bang Animation v5 (FINAL)
+   Cinematic Expansion + Brain Core + Galaxy + Twinkle
    ========================================= */
 
 let scene, camera, renderer, controls, composer, bloomPass;
-let particleSystem, particlePositions, particleVelocities, particleSeeds, particleColors;
+let particleSystem, particlePositions, particleVelocities, particleColors;
 let brainSystem = null;
 let galaxySystem = null;
-let particleCount = 35000;
+let particleCount = 40000;
 let clock = new THREE.Clock();
 
 const canvas = document.getElementById("hero-canvas");
@@ -27,8 +27,8 @@ function init() {
   scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x020611, 0.0008);
 
-  camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 20000);
-  camera.position.set(0, 0, 300);
+  camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 25000);
+  camera.position.set(0, 0, 320);
 
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas, alpha: true, powerPreference: "high-performance" });
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -40,19 +40,19 @@ function init() {
   controls.dampingFactor = 0.05;
   controls.enabled = false;
 
-  const ambientLight = new THREE.AmbientLight(0x4455ff, 0.6);
+  const ambientLight = new THREE.AmbientLight(0x4455ff, 0.7);
   scene.add(ambientLight);
 
-  const coreLight = new THREE.PointLight(0x00d2ff, 6, 2500, 1.6);
+  const coreLight = new THREE.PointLight(0x00d2ff, 8, 3000, 1.8);
   scene.add(coreLight);
 
   composer = new THREE.EffectComposer(renderer);
   composer.addPass(new THREE.RenderPass(scene, camera));
 
-  bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-  bloomPass.threshold = 0.1;
-  bloomPass.strength = 1.6;
-  bloomPass.radius = 1.2;
+  bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.6, 0.4, 0.85);
+  bloomPass.threshold = 0.05;
+  bloomPass.strength = 1.8;
+  bloomPass.radius = 1.3;
   composer.addPass(bloomPass);
 
   createParticleSystem();
@@ -66,11 +66,10 @@ function createParticleSystem() {
   particlePositions = new Float32Array(particleCount * 3);
   particleVelocities = new Float32Array(particleCount * 3);
   particleColors = new Float32Array(particleCount * 3);
-  particleSeeds = new Float32Array(particleCount);
 
   const colorArr = [
     new THREE.Color(0x00ffff),
-    new THREE.Color(0x0055ff),
+    new THREE.Color(0x00aaff),
     new THREE.Color(0xaa00ff),
     new THREE.Color(0xffffff)
   ];
@@ -78,7 +77,7 @@ function createParticleSystem() {
   for (let i = 0; i < particleCount; i++) {
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(2 * Math.random() - 1);
-    const speed = 0.5 + Math.random() * 6.0;
+    const speed = 0.8 + Math.random() * 7.5;
     
     particleVelocities[i * 3] = speed * Math.sin(phi) * Math.cos(theta);
     particleVelocities[i * 3 + 1] = speed * Math.sin(phi) * Math.sin(theta);
@@ -94,10 +93,10 @@ function createParticleSystem() {
   geometry.setAttribute("color", new THREE.BufferAttribute(particleColors, 3));
 
   const material = new THREE.PointsMaterial({
-    size: 1.5,
+    size: 1.8,
     vertexColors: true,
     transparent: true,
-    opacity: 0.9,
+    opacity: 1.0,
     blending: THREE.AdditiveBlending,
     depthWrite: false
   });
@@ -108,41 +107,43 @@ function createParticleSystem() {
 
 function createGalaxySystem() {
   const galaxyGeometry = new THREE.BufferGeometry();
-  const galaxyCount = 15000;
+  const galaxyCount = 20000;
   const positions = new Float32Array(galaxyCount * 3);
+  const starSizes = new Float32Array(galaxyCount);
   
   for (let i = 0; i < galaxyCount; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 5000;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 5000;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 5000;
+    positions[i * 3] = (Math.random() - 0.5) * 8000;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 8000;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 8000;
+    starSizes[i] = Math.random();
   }
   
   galaxyGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-  const material = new THREE.PointsMaterial({ size: 0.8, color: 0x8fd3ff, transparent: true, opacity: 0.3 });
+  const material = new THREE.PointsMaterial({ size: 1.0, color: 0xffffff, transparent: true, opacity: 0.4 });
   galaxySystem = new THREE.Points(galaxyGeometry, material);
   scene.add(galaxySystem);
 }
 
 function createBrainSystem() {
   const brainGeometry = new THREE.BufferGeometry();
-  const brainCount = 18000;
+  const brainCount = 22000;
   const positions = new Float32Array(brainCount * 3);
   const colors = new Float32Array(brainCount * 3);
   
-  const color1 = new THREE.Color(0x00d2ff);
-  const color2 = new THREE.Color(0x7a00ff);
+  const color1 = new THREE.Color(0x00ffff);
+  const color2 = new THREE.Color(0xbd00ff);
 
   for (let i = 0; i < brainCount; i++) {
     const u = Math.random() * Math.PI * 2;
     const v = Math.random() * Math.PI;
     const hemisphere = Math.random() > 0.5 ? 1 : -1;
     
-    let x = 70 * Math.sin(v) * Math.cos(u) * 0.8;
-    let y = 90 * Math.cos(v);
-    let z = 60 * Math.sin(v) * Math.sin(u);
+    let x = 80 * Math.sin(v) * Math.cos(u) * 0.85;
+    let y = 100 * Math.cos(v);
+    let z = 70 * Math.sin(v) * Math.sin(u);
     
-    const noise = Math.sin(x * 0.08) * Math.cos(y * 0.08) * 10;
-    x += noise + (hemisphere * 10);
+    const noise = Math.sin(x * 0.07) * Math.cos(y * 0.07) * 12;
+    x += noise + (hemisphere * 12);
     y += noise;
 
     positions[i * 3] = x;
@@ -159,7 +160,7 @@ function createBrainSystem() {
   brainGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
   const material = new THREE.PointsMaterial({
-    size: 1.0,
+    size: 1.2,
     vertexColors: true,
     transparent: true,
     opacity: 0,
@@ -180,17 +181,17 @@ function animate() {
     positions[i * 3] += particleVelocities[i * 3];
     positions[i * 3 + 1] += particleVelocities[i * 3 + 1];
     positions[i * 3 + 2] += particleVelocities[i * 3 + 2];
-    particleVelocities[i * 3] *= 0.992;
-    particleVelocities[i * 3 + 1] *= 0.992;
-    particleVelocities[i * 3 + 2] *= 0.992;
+    particleVelocities[i * 3] *= 0.994;
+    particleVelocities[i * 3 + 1] *= 0.994;
+    particleVelocities[i * 3 + 2] *= 0.994;
   }
   particleSystem.geometry.attributes.position.needsUpdate = true;
-  particleSystem.rotation.y += 0.002;
+  particleSystem.rotation.y += 0.0015;
 
   if (elapsedTime < TITLE_ANIMATION_DURATION) {
     const progress = elapsedTime / TITLE_ANIMATION_DURATION;
-    const scale = Math.pow(progress, 3.5) * 14.0; 
-    const opacity = progress < 0.75 ? 1.0 : 1.0 - (progress - 0.75) / 0.25;
+    const scale = Math.pow(progress, 4.0) * 16.0; 
+    const opacity = progress < 0.8 ? 1.0 : 1.0 - (progress - 0.8) / 0.2;
     
     if (titleText) {
       titleText.style.transform = `translate(-50%, -50%) scale(${scale})`;
@@ -201,23 +202,24 @@ function animate() {
     if (scrollIndicator) scrollIndicator.classList.add("visible");
     
     if (!brainSystem) createBrainSystem();
-    if (brainSystem && brainSystem.material.opacity < 0.8) {
-      brainSystem.material.opacity += 0.005;
+    if (brainSystem && brainSystem.material.opacity < 0.85) {
+      brainSystem.material.opacity += 0.004;
     }
-    if (particleSystem.material.opacity > 0.1) {
-      particleSystem.material.opacity -= 0.004;
+    if (particleSystem.material.opacity > 0.15) {
+      particleSystem.material.opacity -= 0.003;
     }
   }
 
   if (brainSystem) {
-    brainSystem.rotation.y += 0.003;
-    brainSystem.rotation.z += 0.001;
-    const pulse = 1 + Math.sin(elapsedTime * 2) * 0.05;
+    brainSystem.rotation.y += 0.0025;
+    brainSystem.rotation.z += 0.0008;
+    const pulse = 1 + Math.sin(elapsedTime * 1.5) * 0.06;
     brainSystem.scale.set(pulse, pulse, pulse);
   }
 
   if (galaxySystem) {
-    galaxySystem.rotation.y += 0.0005;
+    galaxySystem.rotation.y += 0.0003;
+    galaxySystem.material.opacity = 0.3 + Math.sin(elapsedTime) * 0.1; 
   }
 
   controls.update();
