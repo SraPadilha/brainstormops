@@ -1,0 +1,47 @@
+---
+layout: default
+title: BrainstormOps - Blog de Tecnologia e Inovação
+---
+
+<section id="hero-intro">
+  <canvas id="hero-canvas"></canvas>
+  <h1 id="hero-title">BrainstormOps</h1>
+  <div id="scroll-indicator">↓</div>
+</section>
+
+<section class="posts-section">
+  <div class="posts-container">
+    <h2 class="section-title">Posts Recentes</h2>
+    
+    <div class="posts-grid">
+      {% for post in site.posts limit:6 %}
+      <article class="post-card">
+        <h3>{{ post.title }}</h3>
+        <div class="post-meta">
+          <time datetime="{{ post.date | date_to_xmlschema }}">
+            {{ post.date | date: "%d/%m/%Y" }}
+          </time>
+        </div>
+        <p class="post-excerpt">
+          {{ post.excerpt | strip_html | truncatewords: 30 }}
+        </p>
+        <a href="{{ post.url | relative_url }}" class="read-more">Ler mais &rarr;</a>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if page.url == "/" %}
+<!-- THREE.js + OrbitControls + EffectComposer + Bloom -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+
+<script src="{{ '/assets/js/bigbang.js' | relative_url }}"></script>
+{% endif %}
